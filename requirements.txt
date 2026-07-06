@@ -1,0 +1,4 @@
+streamlit
+crewai==0.28.8
+openai
+python-dotenv
