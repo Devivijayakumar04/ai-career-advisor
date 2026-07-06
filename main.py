@@ -1,16 +1,8 @@
 import os
 import streamlit as st
 
-# ✅ FORCE correct provider setup
+# ✅ ONLY THIS
 os.environ["OPENROUTER_API_KEY"] = st.secrets["OPENROUTER_API_KEY"]
-
-# 👇 THIS LINE FIXES YOUR ERROR
-os.environ["LITELLM_PROVIDER"] = "openrouter"
-
-# Optional but safe
-os.environ["OPENAI_API_KEY"] = st.secrets["OPENROUTER_API_KEY"]
-os.environ["OPENAI_API_BASE"] = "https://openrouter.ai/api/v1"
-os.environ["OPENAI_MODEL_NAME"] = "openrouter/openrouter/free"
 
 from crew import run_crew
 
