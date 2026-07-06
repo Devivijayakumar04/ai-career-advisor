@@ -5,3 +5,4 @@ setuptools
 langchain-openai
 crewai[litellm]
 python-dotenv
+litellm
