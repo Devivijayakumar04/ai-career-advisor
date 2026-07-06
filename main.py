@@ -1,11 +1,7 @@
-import os
 import streamlit as st
+import requests
 
-# ✅ SET ENV BEFORE ANY IMPORTS
-os.environ["OPENAI_API_KEY"] = st.secrets["OPENROUTER_API_KEY"]
-os.environ["OPENAI_API_BASE"] = "https://openrouter.ai/api/v1"
-
-from crew import run_crew
+API_KEY = st.secrets["OPENROUTER_API_KEY"]
 
 st.title("🎓 AI Career Advisor")
 
@@ -13,5 +9,23 @@ user_input = st.text_input("Enter your interest:")
 
 if st.button("Get Advice"):
     if user_input:
-        result = run_crew(user_input)
-        st.write(result)
+        response = requests.post(
+            "https://openrouter.ai/api/v1/chat/completions",
+            headers={
+                "Authorization": f"Bearer {API_KEY}",
+                "Content-Type": "application/json"
+            },
+            json={
+                "model": "openrouter/openrouter/free",
+                "messages": [
+                    {"role": "user", "content": f"Suggest 3 careers for someone interested in {user_input}"}
+                ]
+            }
+        )
+
+        result = response.json()
+
+        if "choices" in result:
+            st.write(result["choices"][0]["message"]["content"])
+        else:
+            st.write(result)
