@@ -1,4 +1,4 @@
 streamlit
-crewai==0.28.8
-openai
-python-dotenv
+crewai
+tiktoken==0.7.0
+setuptools
