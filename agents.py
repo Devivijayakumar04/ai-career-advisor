@@ -1,9 +1,15 @@
 from crewai import Agent
-from dotenv import load_dotenv
-
-load_dotenv()
+from langchain_openai import ChatOpenAI
+import streamlit as st
 
 def create_career_agent():
+
+    llm = ChatOpenAI(
+        model="mistralai/mistral-7b-instruct:free",
+        openai_api_key=st.secrets["OPENAI_API_KEY"],
+        openai_api_base=st.secrets["OPENAI_BASE_URL"]
+    )
+
     return Agent(
         role="Senior Career Counselor",
 
@@ -21,6 +27,8 @@ def create_career_agent():
             "- No repetition\n"
             "- Be supportive and clear"
         ),
+
+        llm=llm,  # 🔥 THIS IS THE KEY LINE
 
         verbose=False,
         allow_delegation=False
