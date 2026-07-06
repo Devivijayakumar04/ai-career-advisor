@@ -1,31 +1,26 @@
+import os
 import streamlit as st
-import requests
 
-API_KEY = st.secrets["OPENROUTER_API_KEY"]
+# ✅ Set BOTH keys (important)
+os.environ["OPENAI_API_KEY"] = st.secrets["OPENROUTER_API_KEY"]
+os.environ["OPENROUTER_API_KEY"] = st.secrets["OPENROUTER_API_KEY"]
 
-st.title("🎓 AI Career Advisor")
+os.environ["OPENAI_API_BASE"] = st.secrets["OPENAI_API_BASE"]
+os.environ["OPENAI_MODEL_NAME"] = st.secrets["OPENAI_MODEL_NAME"]
 
-user_input = st.text_input("Enter your interest:")
+from crew import run_crew
 
-if st.button("Get Advice"):
+st.set_page_config(page_title="AI Career Advisor", page_icon="🎓")
+
+st.title("🎓 AI Career Recommendation System")
+st.write("Get personalized career guidance based on your interests.")
+
+user_input = st.text_input("Enter your interest (e.g., coding, biology, business):")
+
+if st.button("🚀 Get Career Advice"):
     if user_input:
-        response = requests.post(
-            "https://openrouter.ai/api/v1/chat/completions",
-            headers={
-                "Authorization": f"Bearer {API_KEY}",
-                "Content-Type": "application/json"
-            },
-            json={
-                "model": "openrouter/openrouter/free",
-                "messages": [
-                    {"role": "user", "content": f"Suggest 3 careers for someone interested in {user_input}"}
-                ]
-            }
-        )
-
-        result = response.json()
-
-        if "choices" in result:
-            st.write(result["choices"][0]["message"]["content"])
-        else:
-            st.write(result)
+        with st.spinner("Analyzing your interest..."):
+            result = run_crew(user_input)
+            st.markdown(result)
+    else:
+        st.warning("⚠️ Please enter your interest.")
