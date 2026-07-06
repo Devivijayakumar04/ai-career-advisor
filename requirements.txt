@@ -2,3 +2,4 @@ streamlit
 crewai
 tiktoken==0.7.0
 setuptools
+langchain-openai
