@@ -1,18 +1,24 @@
-from crewai import Crew
+from crewai import Crew, Task
 from agents import create_career_agent
-from tasks import create_career_task
 
 def run_crew(user_input):
+
     agent = create_career_agent()
-    task = create_career_task(agent, user_input)
+
+    task = Task(
+        description=f"Suggest 3 careers for someone interested in {user_input}",
+        agent=agent,
+        expected_output="List of 3 careers with explanation"
+    )
 
     crew = Crew(
         agents=[agent],
         tasks=[task],
-        process="sequential",   # ✅ ensures proper execution
-        verbose=False
+        verbose=True,
+        llm={
+            "model": "openrouter/openrouter/free"
+        }  # ✅ THIS LINE FIXES EVERYTHING
     )
 
     result = crew.kickoff()
-
-    return str(result)   # ✅ ensures clean output for Streamlit
+    return result
