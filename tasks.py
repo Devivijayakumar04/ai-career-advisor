@@ -1,50 +1,101 @@
 from crewai import Task
+from agents import career_advisor
 
-def create_career_task(agent, user_interest):
-    return Task(
+def create_task(user_input):
+    task = Task(
         description=f"""
-Student Interest: "{user_interest}"
+USER INPUT:
+"{user_input}"
 
-Generate a SHORT, structured, and practical response.
+You are an EXPERT CAREER ADVISOR.
 
-🎯 Top 3 Career Recommendations:
+STRICT RULES:
+- Give ONLY ONE best career
+- No multiple suggestions
+- Be confident and precise
 
-1. Career Name
-   - Skills: (3 skills only)
-   - Tools: (2 tools only)
-   - Learn From:
-     • 1 course
-     • 1 free resource
-   - Next Steps:
-     1. Step 1
-     2. Step 2
+OUTPUT FORMAT:
 
-2. Career Name
-   - Skills: (3 skills only)
-   - Tools: (2 tools only)
-   - Learn From:
-     • 1 course
-     • 1 free resource
-   - Next Steps:
-     1. Step 1
-     2. Step 2
+🎯 Career Recommendation
+Title:
+Explanation:
+Why it suits the user:
 
-3. Career Name
-   - Skills: (3 skills only)
-   - Tools: (2 tools only)
-   - Learn From:
-     • 1 course
-     • 1 free resource
-   - Next Steps:
-     1. Step 1
-     2. Step 2
+🧠 Skills Required
+Technical Skills:
+- 
 
-IMPORTANT:
-- Max 180 words TOTAL
-- No explanations
-- No repetition
-- Keep it clean, simple, and useful
+Soft Skills:
+- 
+
+🛠 Tools & Technologies:
+- 
+
+🚀 Learning Roadmap
+Beginner:
+- 
+
+Intermediate:
+- 
+
+Advanced:
+- 
+
+📚 Courses & Resources
+Free Courses:
+- 
+
+Paid Courses:
+- 
+
+Platforms:
+- 
+
+Certifications:
+- 
+
+💡 Projects to Build
+Beginner:
+- 
+
+Intermediate:
+- 
+
+Advanced:
+
+📈 Career Growth
+Entry roles:
+- 
+
+Mid-level:
+- 
+
+Advanced roles:
+- 
+
+🛠 Action Plan
+1.
+2.
+3.
+4.
+5.
 """,
-        agent=agent,
-        expected_output="3 structured career paths with skills, tools, learning, and action steps"
+
+        expected_output="""
+A structured career plan including:
+- One career recommendation
+- Explanation and reasoning
+- Skills (technical + soft)
+- Tools & technologies
+- Learning roadmap
+- Courses (free & paid)
+- Certifications
+- Projects
+- Career growth
+- Step-by-step action plan
+""",
+
+        agent=career_advisor
     )
+
+    return task
