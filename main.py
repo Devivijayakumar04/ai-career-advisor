@@ -128,7 +128,7 @@ if st.button("Generate Roadmap ✨"):
         try:
             with st.spinner("🤖 Thinking... Please wait..."):
 
-                time.sleep(2)
+                time.sleep(5)
 
                 result = run_crew(user_input)
 
