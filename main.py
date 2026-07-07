@@ -38,19 +38,72 @@ def format_output(text):
     return text
 
 
-# CREATE PDF
+# 🔥 NEW IMPROVED PDF FUNCTION
 def create_pdf(content):
+    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+    from reportlab.lib.enums import TA_CENTER
+
     file_path = "career_plan.pdf"
 
     doc = SimpleDocTemplate(file_path)
     styles = getSampleStyleSheet()
 
+    # Custom styles
+    title_style = ParagraphStyle(
+        name="TitleStyle",
+        parent=styles["Heading1"],
+        alignment=TA_CENTER,
+        spaceAfter=15
+    )
+
+    heading_style = ParagraphStyle(
+        name="HeadingStyle",
+        parent=styles["Heading2"],
+        spaceAfter=10
+    )
+
+    normal_style = styles["Normal"]
+
     story = []
 
-    for line in content.split("\n"):
-        if line.strip() != "":
-            story.append(Paragraph(line, styles["Normal"]))
+    # ❌ Remove emojis (prevents ■ issue)
+    content = content.replace("🎯", "")
+    content = content.replace("📝", "")
+    content = content.replace("✅", "")
+    content = content.replace("🚀", "")
+    content = content.replace("💡", "")
+
+    lines = content.split("\n")
+
+    for line in lines:
+        line = line.strip()
+
+        if not line:
             story.append(Spacer(1, 10))
+            continue
+
+        # Title
+        if "Career Recommendation" in line:
+            story.append(Paragraph("Career Recommendation", title_style))
+
+        # Headings
+        elif "Title:" in line:
+            story.append(Paragraph("Title", heading_style))
+
+        elif "Explanation:" in line:
+            story.append(Paragraph("Explanation", heading_style))
+
+        elif "Why it suits you:" in line:
+            story.append(Paragraph("Why it suits you", heading_style))
+
+        # Bullet points
+        elif line.startswith("-"):
+            story.append(Paragraph(f"• {line[1:].strip()}", normal_style))
+
+        # Normal text
+        else:
+            story.append(Paragraph(line, normal_style))
 
     doc.build(story)
     return file_path
@@ -75,7 +128,7 @@ if st.button("Generate Roadmap ✨"):
         try:
             with st.spinner("🤖 Thinking... Please wait..."):
 
-                time.sleep(2)  # slight delay (safe)
+                time.sleep(2)
 
                 result = run_crew(user_input)
 
